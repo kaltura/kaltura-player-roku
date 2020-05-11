@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="LoadingScene" extends="Scene">
+
+<script type="text/brightscript" >
+<![CDATA[
+  function init() as void
+      m.grp = m.top.FindNode("grp")
+      m.lbl = m.top.FindNode("lbl")
+      m.playkit = m.top.FindNode("PlaykitRokuLib")
+      m.provider = m.top.FindNode("PlaykitProviderLib")
+      m.playkit.observeField("loadStatus", "onLoadStatusChanged")
+      m.provider.observeField("loadStatus", "onLoadStatusChanged")
+  end function
+
+  function onLoadStatusChanged() as void
+      print m.playkit.loadStatus
+      print m.provider.loadStatus
+      if (m.playkit.loadStatus = "ready" and m.provider.loadStatus = "ready")
+          'Load Main Screen
+	  m.mainScreen = CreateObject("roSGNode", "MainScreen")
+          m.grp.removeChild(m.lbl)
+          m.lbl = invalid
+	  m.grp.appendChild(m.mainScreen)
+      endif
+  end function
+]]>
+</script>
+
+<children>
+<ComponentLibrary id="PlaykitProviderLib" uri="pkg:/source/playkit-roku-providers.zip" />
+<ComponentLibrary id="PlaykitRokuLib" uri="pkg:/source/playkit-roku.zip" />
+
+<Group id="grp">
+    <Label id="lbl" text="Please Wait..." translation="[300, 200]" width="400" height="200" />
+</Group>
+</children>
+
+</component>
+
+

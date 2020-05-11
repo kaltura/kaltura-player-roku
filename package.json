@@ -1,0 +1,30 @@
+{
+  "name": "kaltura-player-roku",
+  "version": "1.0.0",
+  "license": "AGPL-3.0",
+  "scripts": {
+    "deploy": "roku-deploy",
+    "clean": "rm -rf ./out/*",
+    "build": "filename=$(cat ./rokudeploy.json | jq -j '.outFile') && zip -9 -r ./out/$filename.zip './source' './components' './images' 'manifest'",
+    "debug": "host=$(cat ./rokudeploy.json | jq -j '.host') && telnet $host 8085",
+    "release": "standard-version",
+    "publish": "git push --follow-tags --no-verify origin master"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-plugin-roku": "^1.4.1",
+    "roku-deploy": "^3.0.1",
+    "standard-version": "^4.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaltura/kaltura-player-roku.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kaltura/kaltura-player-roku/issues"
+  },
+  "homepage": "https://github.com/kaltura/kaltura-player-roku#readme",
+  "dependencies": {
+    "playkit-roku": "https://github.com/kaltura/playkit-roku.git#INIT"
+  }
+}
