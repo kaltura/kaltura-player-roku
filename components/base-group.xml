@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<component name = "BaseGroup" extends = "Group" >
+    <interface>
+        <field id="cId" type="string" />
+        <function name="addEventListener" />
+        <function name="removeEventListener" />
+        <function name="removeEventListeners" />
+        <function name="dispatchEvent" />
+    </interface>
+    <script type="text/brightscript" uri="pkg:/components/fake-event.brs" />
+</component>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="sample" extends="Scene">
+    <script type="text/brightscript" uri="pkg:/components/sample.brs"/>
+    <interface>
+        <function name="loaded" />
+        <function name="ready" />
+        <function name="eventHandler" />
+    </interface>
+
+    <children>
+        <KalturaPlayer id="kaltura-player-roku"/>
+    </children>
+
+</component>

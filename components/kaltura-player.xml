@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="KalturaPlayer" extends="BaseGroup">
+
+    <interface>
+        <function name="loaded" />
+        <function name="ready" />
+
+        <function name="initialize" />
+        <function name="_initialize" />
+        <function name="destroy"/>
+        <function name="reset"/>
+
+        <function name="loadMedia" />
+        <function name="setMedia" />
+
+        <function name="play" />
+        <function name="pause" />
+        <function name="preload" />
+        <function name="load" />
+        <function name="loop" />
+        <function name="mute" />
+
+        <function name="getPoster" />
+        <function name="getKalturaPlayerEvents" />
+        <function name="getAudioTracks" />
+        <function name="getCurrentAudioTrack" />
+        <function name="selectAudioTrack" />
+        <function name="getTextTracks" />
+        <function name="getCurrentTextTrack" />
+        <function name="selectTextTrack" />
+        <function name="hideTextTrack" />
+        <function name="seekToLiveEdge" />
+        <function name="isLive" />
+        <function name="getVideoElement" />
+        <function name="resetAllCues" />
+        <function name="getCurrentTime" />
+        <function name="setCurrentTime" />
+    </interface>
+
+    <children>
+        <ComponentLibrary id="PlaykitProviderLib" uri="pkg:/source/playkit-roku-providers.zip" />
+        <ComponentLibrary id="PlaykitLib" uri="pkg:/source/playkit-roku.zip" />
+
+        <Group id="grp">
+            <Label id="lbl" text="Please Wait..." translation="[300, 200]" width="400" height="200" />
+        </Group>
+    </children>
+
+    <script type="text/brightscript" uri="pkg:/components/utils/associative-array.brs"/>
+    <script type="text/brightscript" uri="pkg:/components/poster.brs"/>
+    <script type="text/brightscript" uri="pkg:/components/constants/kaltura-player-event.brs"/>
+    <script type="text/brightscript" uri="pkg:/components/kaltura-player.brs"/>
+
+</component>
+
+

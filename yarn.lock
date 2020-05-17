@@ -1873,9 +1873,13 @@ pinkie@^2.0.0:
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
   integrity sha1-clVrgM+g1IqXToDnckjoDtT3+HA=
 
+"playkit-roku-providers@https://github.com/kaltura/playkit-roku-providers.git#INIT":
+  version "1.0.0"
+  resolved "https://github.com/kaltura/playkit-roku-providers.git#f265d6b0ef61d976f21e55c896b79371f6d64bb4"
+
 "playkit-roku@https://github.com/kaltura/playkit-roku.git#INIT":
   version "1.0.0"
-  resolved "https://github.com/kaltura/playkit-roku.git#16beb75e7cc94ad2f245118a458e7a4c0a28050a"
+  resolved "https://github.com/kaltura/playkit-roku.git#5934242c28830c8f8fd66cb3d66cae58459a3e6d"
 
 prelude-ls@~1.1.2:
   version "1.1.2"

@@ -5,7 +5,7 @@ sub Main()
     m.port = CreateObject("roMessagePort")
     screen.setMessagePort(m.port)
 
-    scene = screen.CreateScene("LoadingScene")
+    scene = screen.CreateScene("sample")
     screen.show()
 
     while(true)
