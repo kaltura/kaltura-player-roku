@@ -87,14 +87,20 @@ end sub
 
 function eventHandler(event as string, payload as object)
     print event " " payload
+    if payload <> invalid then print payload["data"]
 end function
 
 function loaded(event as string, payload as object)
     print "loaded"
-    m.kalturaPlayer.callFunc("initialize", m.config)
+    kalturaPlayerEvent = m.kalturaPlayer.callFunc("getKalturaPlayerEvents")
+    for each kalturaEvent in kalturaPlayerEvent
+        m.kalturaPlayer.callFunc("addEventListener", kalturaPlayerEvent[kalturaEvent], m.top, "eventHandler")
+    end for
+    m.kalturaPlayer.callFunc("setup", m.config)
     m.kalturaPlayer.callFunc("loadMedia", {
         "entryId":"548569"
     })
+
 end function
 
 function ready(event as string, payload as object)

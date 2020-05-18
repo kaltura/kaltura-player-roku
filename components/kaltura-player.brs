@@ -55,21 +55,22 @@ end function
 
 function _selectPoster(config as object,mediaConfig as object) as string
   displaySize = CreateObject("roDeviceInfo").GetDisplaySize()
-  print displaySize
   if config <> invalid and config.sources <> invalid and mediaConfig <> invalid and mediaConfig.sources <> invalid
     return _getKalturaPoster(config.sources,mediaConfig.sources,displaySize)
   endif
 end function
 
-function initialize(config as object)
+function _initialize(config as object)
   print "[ initialize kaltura player ]"
   m._isInitialized = true
-  print config
-  print config.provider
   if config = invalid then return invalid
   m._player.callFunc("initialize", config)
   m._provider.callFunc("initialize",config.provider)
   _attach()
+end function
+
+function setup(config as object)
+  _initialize(config)
 end function
 
 function loaded() as boolean
@@ -85,7 +86,6 @@ function getKalturaPlayerEvents() as object
 end function
 
 function loadMedia(mediaInfo as object)
-  reset()
   m._mediaInfo = mediaInfo
   m._provider.callFunc("getMediaConfig",m._mediaInfo)
 end function
@@ -95,9 +95,7 @@ function setMedia(mediaConfig as object)
   arrayUtils = AssociativeArrayUtil()
   playerConfig = arrayUtils.mergeDeep(mediaConfig, getMediaConfig())
   playerConfig = arrayUtils.mergeDeep(playerConfig, {"session": m._player.callFunc("getConfig").session})
-  print _selectPoster(playerConfig,mediaConfig)
   config_tmp = arrayUtils.mergeDeep({"sources":{"poster": _selectPoster(playerConfig,mediaConfig)}}, mediaConfig)
-  print config_tmp
   m._player.callFunc("configure", config_tmp)
   m._readyState = true
   m.top.callFunc("dispatchEvent", m._events.MEDIA_LOADED)
@@ -121,8 +119,8 @@ function getPoster() as string
 end function
 
 function reset()
-  m._readyState = false
   _detach()
+  m._readyState = false
   m._player.callFunc("reset")
 end function
 
@@ -201,5 +199,7 @@ sub getProviderResponse()
   if not m._provider.responseData["hasError"]
     config = arrayUtils.mergeDeep(m._provider.responseData["data"], m._player.callFunc("getConfig"))
     setMedia(config)
+  else
+    m.top.callFunc("dispatchEvent", m._events.ERROR, m._provider.responseData["data"])
   end if
 end sub

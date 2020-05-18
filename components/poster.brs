@@ -6,11 +6,15 @@ function _getKalturaPoster(playerSources as object, mediaSources as object, dime
     playerHeight = dimensions.h
     if ( type(playerPoster) = "String" or type(playerPoster) = "roString" ) and playerPoster = mediaConfigPoster then
         regexThumbnail = CreateObject("roRegex", "/.*\/thumbnail\/.*(?:width|height)\/\d+\/(?:height|width)\/\d+/", "i")
-        return _setPlayerDimensionsOnPoster(playerPoster,playerWidth,playerHeight)
+        if regexThumbnail.IsMatch(playerPoster)
+            return _setPlayerDimensionsOnPoster(playerPoster,playerWidth,playerHeight)
+        endif
     endif
     if type(playerPoster) = "roArray"
         return _selectPosterByPlayerDimensions(playerPoster,playerWidth,playerHeight)
     end if
+
+    return ""
 end function
 
 function _setPlayerDimensionsOnPoster(poster as string, playerWidth as integer, playerHeight as integer) as string

@@ -47,35 +47,6 @@ function AssociativeArrayUtil() as Object
 
         end function
 
-        print: function(target as object,tabSpace=0)
-
-          print m._duplicateString(" ",tabSpace) + "{"
-          if target.count() = 0 then
-            print m._duplicateString(" ",tabSpace) + target
-          end if
-
-          if m.isArray(target) then
-            For each item in target.Items()
-              If m.isArray(target[item.key]) = true then
-                m.print(target[item.key], tabSpace + 2)
-              else
-                print m._duplicateString(" ",tabSpace + 2) + item.key ": " item.value
-              end If
-            End For
-          end if
-          print m._duplicateString(" ",tabSpace) + "}"
-
-        end function
-
-
-        _duplicateString: function(str as String, counter) as string
-          retStr = ""
-          For i=0 to counter step 1
-            retStr += str
-          End For
-          return retStr
-        end function
-
     }
 
     return util

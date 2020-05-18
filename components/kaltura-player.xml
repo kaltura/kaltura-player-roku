@@ -6,8 +6,7 @@
         <function name="loaded" />
         <function name="ready" />
 
-        <function name="initialize" />
-        <function name="_initialize" />
+        <function name="setup" />
         <function name="destroy"/>
         <function name="reset"/>
 
@@ -49,6 +48,7 @@
 
     <script type="text/brightscript" uri="pkg:/components/utils/associative-array.brs"/>
     <script type="text/brightscript" uri="pkg:/components/poster.brs"/>
+    <script type="text/brightscript" uri="pkg:/components/setup-helper.brs"/>
     <script type="text/brightscript" uri="pkg:/components/constants/kaltura-player-event.brs"/>
     <script type="text/brightscript" uri="pkg:/components/kaltura-player.brs"/>
 
