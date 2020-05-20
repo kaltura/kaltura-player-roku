@@ -96,9 +96,10 @@ function setMedia(mediaConfig as object)
   playerConfig = arrayUtils.mergeDeep(mediaConfig, getMediaConfig())
   playerConfig = arrayUtils.mergeDeep(playerConfig, {"session": m._player.callFunc("getConfig").session})
   config_tmp = arrayUtils.mergeDeep({"sources":{"poster": _selectPoster(playerConfig,mediaConfig)}}, mediaConfig)
-  m._player.callFunc("configure", config_tmp)
-  m._readyState = true
-  m.top.callFunc("dispatchEvent", m._events.MEDIA_LOADED)
+  if m._player.callFunc("configure", config_tmp)
+    m._readyState = true
+    m.top.callFunc("dispatchEvent", m._events.MEDIA_LOADED)
+  end if
 end function
 
 function getMediaInfo() as object
