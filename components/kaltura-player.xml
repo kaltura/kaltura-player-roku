@@ -5,6 +5,7 @@
     <interface>
         <function name="loaded" />
         <function name="ready" />
+        <function name="sourceSelectedListener" />
 
         <function name="setup" />
         <function name="destroy"/>
