@@ -5,7 +5,6 @@ sub init()
   m._providerLib.observeField("loadStatus", "_onLoadStatusChanged")
 
   m._grp = m.top.FindNode("grp")
-  m._lbl = m.top.FindNode("lbl")
   _setDefaultValues()
 end sub
 
@@ -13,19 +12,18 @@ end sub
    print "loadstatus playkit " m._playkitLib.loadStatus " provider " m._providerLib.loadStatus
    if (m._playkitLib.loadStatus = "ready" and m._providerLib.loadStatus = "ready")
 
+     m._playkitLib.unobserveField("loadStatus")
+     m._providerLib.unobserveField("loadStatus")
+
      m._player = CreateObject("roSGNode", "PlaykitLib:Player")
-
-     arrayUtils = AssociativeArrayUtil()
-     m._events = arrayUtils.mergeDeep(m._events, m._player.callFunc("getPlayerEvents"))
-
      m._provider = CreateObject("roSGNode", "PlaykitProviderLib:OTTProvider")
-     m._provider.observeField("responseData", "getProviderResponse")
+     m._events = AssociativeArrayUtil().mergeDeep(m._events, m._player.callFunc("getPlayerEvents"))
 
      m._loadedState = true
      m.top.callFunc("dispatchEvent", m._events.KALTURA_PLAYER_LOADED)
 
-     m._grp.removeChild(m._lbl)
-     m._lbl = invalid
+     m.top.removeChild(m._grp)
+     m._grp = invalid
      m.top.appendChild(m._player)
    endif
  end sub
@@ -87,15 +85,15 @@ end function
 
 function loadMedia(mediaInfo as object)
   m._mediaInfo = mediaInfo
+  m._provider.observeField("responseData", "getProviderResponse")
   m._provider.callFunc("getMediaConfig",m._mediaInfo)
 end function
 
 function setMedia(mediaConfig as object)
   print "[ setMedia ]"
   arrayUtils = AssociativeArrayUtil()
-  playerConfig = arrayUtils.mergeDeep(mediaConfig, getMediaConfig())
-  playerConfig = arrayUtils.mergeDeep(playerConfig, {"session": m._player.callFunc("getConfig").session})
-  config_tmp = arrayUtils.mergeDeep({"sources":{"poster": _selectPoster(playerConfig,mediaConfig)}}, mediaConfig)
+  playerConfig = arrayUtils.mergeDeep(mediaConfig, m._player.callFunc("getConfig"))
+  config_tmp = arrayUtils.mergeDeep({"sources":{"poster": _selectPoster(m._player.callFunc("getConfig"), mediaConfig)}}, mediaConfig)
   if m._player.callFunc("configure", config_tmp)
     m._readyState = true
     m.top.callFunc("dispatchEvent", m._events.MEDIA_LOADED)
@@ -103,7 +101,11 @@ function setMedia(mediaConfig as object)
 end function
 
 function getMediaInfo() as object
-  return m._mediaInfo
+  if m._mediaInfo <> invalid
+    return m._mediaInfo
+  else
+    return {}
+  end if
 end function
 
 function getMediaConfig() as object
@@ -147,6 +149,10 @@ end function
 
 function mute(isMuted as boolean) as void
   m._player.callFunc("mute",isMuted)
+end function
+
+function getConfig() as object
+  return m._player.callFunc("getConfig")
 end function
 
 function getAudioTracks() as object
@@ -195,11 +201,10 @@ end function
 
 sub getProviderResponse()
   print "[ getProviderResponse ]"
-  arrayUtils = AssociativeArrayUtil()
+  m._provider.unobserveField("responseData")
 
   if not m._provider.responseData["hasError"]
-    config = arrayUtils.mergeDeep(m._provider.responseData["data"], m._player.callFunc("getConfig"))
-    setMedia(config)
+    setMedia(m._provider.responseData["data"])
   else
     m.top.callFunc("dispatchEvent", m._events.ERROR, m._provider.responseData["data"])
   end if

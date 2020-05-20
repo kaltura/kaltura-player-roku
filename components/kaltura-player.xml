@@ -20,6 +20,7 @@
         <function name="loop" />
         <function name="mute" />
 
+        <function name="getConfig" />
         <function name="getPoster" />
         <function name="getKalturaPlayerEvents" />
         <function name="getAudioTracks" />
