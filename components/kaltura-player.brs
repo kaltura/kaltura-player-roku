@@ -175,6 +175,10 @@ function getCurrentTextTrack() as object
   return m._player.callFunc("getCurrentTextTrack")
 end function
 
+function selectTextTrack(track as object) as void
+  m._player.callFunc("selectTextTrack", track)
+end function
+
 function hideTextTrack() as void
   m._player.callFunc("hideTextTrack")
 end function
