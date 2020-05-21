@@ -4,7 +4,6 @@ sub init()
   m._providerLib = m.top.FindNode("PlaykitProviderLib")
   m._providerLib.observeField("loadStatus", "_onLoadStatusChanged")
 
-  m._grp = m.top.FindNode("grp")
   _setDefaultValues()
 end sub
 
@@ -16,15 +15,15 @@ end sub
      m._providerLib.unobserveField("loadStatus")
 
      m._player = CreateObject("roSGNode", "PlaykitLib:Player")
-     m._provider = CreateObject("roSGNode", "PlaykitProviderLib:OTTProvider")
      m._events = AssociativeArrayUtil().mergeDeep(m._events, m._player.callFunc("getPlayerEvents"))
+     m._provider = CreateObject("roSGNode", "PlaykitProviderLib:OTTProvider")
 
      m._loadedState = true
      m.top.callFunc("dispatchEvent", m._events.KALTURA_PLAYER_LOADED)
 
-     m.top.removeChild(m._grp)
-     m._grp = invalid
      m.top.appendChild(m._player)
+     m._player.setFocus(true)
+
    endif
  end sub
 
@@ -90,13 +89,13 @@ function getKalturaPlayerEvents() as object
   return m._events
 end function
 
-function loadMedia(mediaInfo as object)
+function loadMedia(mediaInfo as object) as void
   m._mediaInfo = mediaInfo
   m._provider.observeField("responseData", "getProviderResponse")
   m._provider.callFunc("getMediaConfig",m._mediaInfo)
 end function
 
-function setMedia(mediaConfig as object)
+function setMedia(mediaConfig as object) as void
   print "[ setMedia ]"
   playerConfig = AssociativeArrayUtil().mergeDeep(mediaConfig, m._player.callFunc("getConfig"))
   config_tmp = AssociativeArrayUtil().mergeDeep({"sources":{"poster": _selectPoster(m._player.callFunc("getConfig"), mediaConfig)}}, mediaConfig)

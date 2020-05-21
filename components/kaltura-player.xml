@@ -42,10 +42,6 @@
     <children>
         <ComponentLibrary id="PlaykitProviderLib" uri="pkg:/source/playkit-roku-providers.zip" />
         <ComponentLibrary id="PlaykitLib" uri="pkg:/source/playkit-roku.zip" />
-
-        <Group id="grp">
-            <Label id="lbl" text="Please Wait..." translation="[300, 200]" width="400" height="200" />
-        </Group>
     </children>
 
     <script type="text/brightscript" uri="pkg:/components/utils/associative-array.brs"/>
