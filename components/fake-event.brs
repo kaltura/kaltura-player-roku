@@ -15,11 +15,11 @@ Function addEventListener(eventType as String, element as Object, functionName a
 
 end Function
 
-function removeEventListener(eventType as string, element as object) as void
+function removeEventListener(eventType as string, element as object, functionName as string) as void
 
     listeners = []
     for i = 0 to m.listeners.count() - 1
-        if m.listeners[i]["element"].cId <> element.cId or m.listeners[i]["eventType"] <> eventType then
+        if not (m.listeners[i]["element"].cId = element.cId and m.listeners[i]["eventType"] = eventType and m.listeners[i]["function"] = functionName ) then
             listeners.push(m.listeners[i])
         end if
     end for

@@ -27,7 +27,7 @@ end sub
    endif
  end sub
 
-function sourceSelectedListener(event as string, payload as object) as void
+function _sourceSelectedListener(event as string, payload as object) as void
   m._readyState = true
   m.top.callFunc("dispatchEvent", m._events.MEDIA_LOADED)
 end function
@@ -39,7 +39,7 @@ function _attach() as object
     m._player.callFunc("addEventListener", playerEvents[event], m.top, "dispatchEvent")
   end for
 
-  m._player.callFunc("addEventListener", playerEvents.SOURCE_SELECTED, m.top, "sourceSelectedListener")
+  m._player.callFunc("addEventListener", playerEvents.SOURCE_SELECTED, m.top, "_sourceSelectedListener")
 end function
 
 function _detach() as object
@@ -100,6 +100,10 @@ function setMedia(mediaConfig as object) as void
   playerConfig = AssociativeArrayUtil().mergeDeep(mediaConfig, m._player.callFunc("getConfig"))
   config_tmp = AssociativeArrayUtil().mergeDeep({"sources":{"poster": _selectPoster(m._player.callFunc("getConfig"), mediaConfig)}}, mediaConfig)
   m._player.callFunc("configure", config_tmp)
+end function
+
+function getDuration() as integer
+  return m._player.callFunc("getDuration")
 end function
 
 function getMediaInfo() as object

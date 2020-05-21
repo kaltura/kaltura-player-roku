@@ -5,7 +5,7 @@
     <interface>
         <function name="loaded" />
         <function name="ready" />
-        <function name="sourceSelectedListener" />
+        <function name="_sourceSelectedListener" />
 
         <function name="setup" />
         <function name="destroy"/>
@@ -21,6 +21,7 @@
         <function name="loop" />
         <function name="mute" />
 
+        <function name="getDuration" />
         <function name="getConfig" />
         <function name="getPoster" />
         <function name="getKalturaPlayerEvents" />
