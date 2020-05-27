@@ -55,6 +55,7 @@ function _setDefaultValues()
   m._readyState = false
   m._events = _getEvents()
   m._isInitialized = invalid
+  m._mediaInfo = invalid
 end function
 
 function _selectPoster(config as object,mediaConfig as object) as string
@@ -62,6 +63,7 @@ function _selectPoster(config as object,mediaConfig as object) as string
   if config <> invalid and config.sources <> invalid and mediaConfig <> invalid and mediaConfig.sources <> invalid
     return _getKalturaPoster(config.sources,mediaConfig.sources,displaySize)
   endif
+  return ""
 end function
 
 function _initialize(config as object)
@@ -128,9 +130,21 @@ function getPoster() as string
 end function
 
 function reset()
-  _detach()
-  m._readyState = false
   m._player.callFunc("reset")
+  _setDefaultValues()
+  _detach()
+end function
+
+function destroy()
+  m._player.callFunc("destroy")
+  reset()
+  m.top.removeChild(m._playkitLib)
+  m.top.removeChild(m._providerLib)
+  m.top.removeChild(m._player)
+  m._playkitLib = invalid
+  m._providerLib = invalid
+  m._player = invalid
+  m._provider = invalid
 end function
 
 function play() as void
