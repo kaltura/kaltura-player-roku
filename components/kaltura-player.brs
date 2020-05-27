@@ -227,6 +227,22 @@ function setCurrentTime(currentTime as integer) as void
   m._player.callFunc("setCurrentTime",currentTime)
 end function
 
+function getHeight() as integer
+  return m._player.callFunc("getHeight")
+end function
+
+function setHeight(height as integer) as void
+  m._player.callFunc("setHeight",height)
+end function
+
+function getWidth() as integer
+  return m._player.callFunc("getWidth")
+end function
+
+function setWidth(width as integer) as void
+  m._player.callFunc("setWidth",width)
+end function
+
 sub getProviderResponse()
   print "[ getProviderResponse ]"
   m._provider.unobserveField("responseData")

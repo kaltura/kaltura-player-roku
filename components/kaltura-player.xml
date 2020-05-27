@@ -39,6 +39,10 @@
         <function name="resetAllCues" />
         <function name="getCurrentTime" />
         <function name="setCurrentTime" />
+        <function name="setHeight" />
+        <function name="getHeight" />
+        <function name="setWidth" />
+        <function name="getWidth" />
     </interface>
 
     <children>
