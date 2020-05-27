@@ -141,20 +141,24 @@ function pause() as void
   m._player.callFunc("pause")
 end function
 
-function preload() as void
-  m._player.callFunc("preload")
+function setPreload() as void
+  m._player.callFunc("setPreload")
 end function
 
 function load(startTime=0 as integer) as void
   m._player.callFunc("load", startTime)
 end function
 
-function loop(isLoop as boolean) as void
-  m._player.callFunc("loop",isLoop)
+function setLoop(isLoop as boolean) as void
+  m._player.callFunc("setLoop",isLoop)
 end function
 
-function mute(isMuted as boolean) as void
-  m._player.callFunc("mute",isMuted)
+function isMuted() as boolean
+  m._player.callFunc("isMuted")
+end function
+
+function setMute(isMuted as boolean) as void
+  m._player.callFunc("setMute",isMuted)
 end function
 
 function getConfig() as object

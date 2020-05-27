@@ -16,11 +16,12 @@
 
         <function name="play" />
         <function name="pause" />
-        <function name="preload" />
         <function name="load" />
-        <function name="loop" />
-        <function name="mute" />
 
+        <function name="setPreload" />
+        <function name="setLoop" />
+        <function name="isMuted" />
+        <function name="setMute" />
         <function name="getDuration" />
         <function name="getConfig" />
         <function name="getPoster" />
