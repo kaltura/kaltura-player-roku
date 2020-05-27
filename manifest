@@ -3,5 +3,5 @@ subtitle=Kaltura player Roku
 major_version=1
 minor_version=0
 build_version=00001
-
+sg_component_libs_provided=KalturaPlayerLib
 hidden=1
