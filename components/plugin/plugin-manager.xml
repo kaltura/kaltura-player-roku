@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="PluginManager" extends="Node">
+    <interface>
+        <function name="load"/>
+        <function name="loadMedia"/>
+        <function name="destroy"/>
+        <function name="reset"/>
+        <function name="get"/>
+        <function name="getAll"/>
+    </interface>
+    <script type="text/brightscript" uri="pkg:/components/plugin/plugin-manager.brs"/>
+</component>

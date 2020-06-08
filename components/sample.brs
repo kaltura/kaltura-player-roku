@@ -31,6 +31,13 @@ sub init()
                     "format": "hls"
                 }
             ]
+        },
+        "plugins":{
+            OTTAnalytics:{
+                "serviceUrl":"https://rest-us.ott.kaltura.com/v4_5/api_v3/",
+                "entryId": "548569",
+                "isAnonymous": false
+            }
         }
     }
 

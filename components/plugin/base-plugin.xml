@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="BasePlugin" extends="BaseNode">
+    <interface>
+        <function name="createPlugin"/>
+        <function name="isValid"/>
+        <function name="initialize"/>
+        <function name="getConfig"/>
+        <function name="updateConfig"/>
+        <function name="loadMedia"/>
+        <function name="destroy"/>
+        <function name="reset"/>
+        <function name="getName"/>
+    </interface>
+    <script type="text/brightscript" uri="pkg:/components/utils/associative-array.brs"/>
+    <script type="text/brightscript" uri="pkg:/components/plugin/base-plugin.brs"/>
+</component>

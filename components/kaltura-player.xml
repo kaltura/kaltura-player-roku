@@ -11,8 +11,10 @@
         <function name="destroy"/>
         <function name="reset"/>
 
+        <function name="configure" />
         <function name="loadMedia" />
         <function name="setMedia" />
+        <function name="createRequestBuilder" />
 
         <function name="play" />
         <function name="pause" />
@@ -48,6 +50,7 @@
     <children>
         <ComponentLibrary id="PlaykitProviderLib" uri="pkg:/source/playkit-roku-providers.zip" />
         <ComponentLibrary id="PlaykitLib" uri="pkg:/source/playkit-roku.zip" />
+        <ComponentLibrary id="PlaykitOTTAnalyticsLib" uri="pkg:/source/playkit-roku-ott-analytics.zip" />
     </children>
 
     <script type="text/brightscript" uri="pkg:/components/utils/associative-array.brs"/>
