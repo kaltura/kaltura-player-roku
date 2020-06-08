@@ -8,6 +8,7 @@ The Kaltura Player integrates:
 
 - [PlayKit ROKU ](https://github.com/kaltura/playkit-js) - The core library.
 - [PlayKit ROKU Providers](https://github.com/kaltura/playkit-roku-providers) as the backend media providers.
+- [PlayKit ROKU Analytics](https://github.com/kaltura/playkit-roku-ott-analytics) plugin for analytics.
 
 The Kaltura Player exposes two different players: the _Kaltura OVP Player_ and _Kaltura Cloud TV Player_. Each player integrates its related packages, as you can see in the following table:
 

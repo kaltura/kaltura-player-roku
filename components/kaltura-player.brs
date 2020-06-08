@@ -10,7 +10,6 @@ sub init()
 end sub
 
  sub _onLoadStatusChanged()
-   print "loadstatus playkit " m._playkitLib.loadStatus " provider " m._providerLib.loadStatus " analytics " m._ottAnaylticsLib.loadStatus
    if (m._playkitLib.loadStatus = "ready" and m._providerLib.loadStatus = "ready" and m._ottAnaylticsLib.loadStatus = "ready")
 
      m._playkitLib.unobserveField("loadStatus")
@@ -18,12 +17,13 @@ end sub
      m._ottAnaylticsLib.unobserveField("loadStatus")
 
      m._player = CreateObject("roSGNode", "PlaykitLib:Player")
-     m._pluginManager = CreateObject("roSGNode", "PluginManager")
-     pluginRegister = CreateObject("roSGNode", "PluginRegister")
-     m.global.addFields( {pluginRegister: pluginRegister} )
      m._events = AssociativeArrayUtil().mergeDeep(m._events, m._player.callFunc("getPlayerEvents"))
 
+     m._pluginManager = CreateObject("roSGNode", "PluginManager")
+     m.global.addFields( {pluginRegister: CreateObject("roSGNode", "PluginRegister")} )
+
      m._provider = CreateObject("roSGNode", "PlaykitProviderLib:OTTProvider")
+     ' register the analytics plugin
      CreateObject("roSGNode", "PlaykitOTTAnalyticsLib:OTTAnalyticsRegister")
 
      m._loadedState = true
