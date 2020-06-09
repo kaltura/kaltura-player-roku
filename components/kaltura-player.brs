@@ -10,6 +10,7 @@ sub init()
 end sub
 
  sub _onLoadStatusChanged()
+   print "core " m._playkitLib.loadStatus " provider " m._providerLib.loadStatus " analytics " m._ottAnaylticsLib.loadStatus
    if (m._playkitLib.loadStatus = "ready" and m._providerLib.loadStatus = "ready" and m._ottAnaylticsLib.loadStatus = "ready")
 
      m._playkitLib.unobserveField("loadStatus")
@@ -20,11 +21,7 @@ end sub
      m._events = AssociativeArrayUtil().mergeDeep(m._events, m._player.callFunc("getPlayerEvents"))
 
      m._pluginManager = CreateObject("roSGNode", "PluginManager")
-     m.global.addFields( {pluginRegister: CreateObject("roSGNode", "PluginRegister")} )
-
      m._provider = CreateObject("roSGNode", "PlaykitProviderLib:OTTProvider")
-     ' register the analytics plugin
-     CreateObject("roSGNode", "PlaykitOTTAnalyticsLib:OTTAnalyticsRegister")
 
      m._loadedState = true
      m.top.callFunc("dispatchEvent", m._events.KALTURA_PLAYER_LOADED)
@@ -99,12 +96,13 @@ function _configureOrLoadPlugins(plugins as object) as object
   plugins_tmp = plugins
   if plugins <> invalid
     for each key in plugins.Keys()
-      if m._pluginManager.callFunc("get",key) <> invalid
-        m._pluginManager.callFunc("updateConfig",plugins[key])
-        plugins_tmp.AddReplace(key, m._pluginManager.callFunc("getConfig"))
+      plugin = m._pluginManager.callFunc("get",key)
+      if plugin <> invalid
+        plugin.callFunc("updateConfig",plugins[key])
+        plugins_tmp.AddReplace(key, plugin.callFunc("getConfig"))
       else
         if m._player.callFunc("getSrc") <> ""
-          plugins_tmp.plugins.Delete(key)
+          plugins_tmp.Delete(key)
         else
           m._pluginManager.callFunc("load",key,m.top,plugins[key])
         end if
@@ -122,23 +120,24 @@ function getKalturaPlayerEvents() as object
   return m._events
 end function
 
-function configure(config as object) as void
+function configure(config={} as object) as void
   config_tmp = AssociativeArrayUtil().mergeDeep(config, m._player.callFunc("getConfig"))
-  config_tmp = AssociativeArrayUtil().mergeDeep({plugins:_configureOrLoadPlugins(config.plugins)}, config)
-  m._player.callFunc("configure", newConfig)
+  config_tmp.plugins = AssociativeArrayUtil().mergeDeep(_configureOrLoadPlugins(config_tmp.plugins), config_tmp.plugins)
+  m._player.callFunc("configure", config_tmp)
 end function
 
 function loadMedia(mediaInfo as object) as void
   m._mediaInfo = mediaInfo
   m._provider.observeField("responseData", "getProviderResponse")
   m._provider.callFunc("getMediaConfig",m._mediaInfo)
+  m._pluginManager.callFunc("loadMedia",mediaInfo)
 end function
 
 function setMedia(mediaConfig as object) as void
   print "[ setMedia ]"
   playerConfig = AssociativeArrayUtil().mergeDeep(mediaConfig, m._player.callFunc("getConfig"))
-  config_tmp = AssociativeArrayUtil().mergeDeep({"sources":{"poster": _selectPoster(m._player.callFunc("getConfig"), mediaConfig)}}, mediaConfig)
-  config_tmp = AssociativeArrayUtil().mergeDeep({plugins:_configureOrLoadPlugins(config_tmp.plugins)}, config_tmp)
+  config_tmp = AssociativeArrayUtil().mergeDeep({"sources":{"poster": _selectPoster(m._player.callFunc("getConfig"), mediaConfig)}}, playerConfig)
+  config_tmp.plugins = _configureOrLoadPlugins(config_tmp.plugins)
   m._player.callFunc("configure", config_tmp)
 end function
 
@@ -169,12 +168,14 @@ end function
 
 function reset()
   m._player.callFunc("reset")
+  m._pluginManager.callFunc("reset")
   _setDefaultValues()
   _detach()
 end function
 
 function destroy()
   m._player.callFunc("destroy")
+  m._pluginManager.callFunc("destroy")
   reset()
   m.top.removeChild(m._ottAnaylticsLib)
   m.top.removeChild(m._playkitLib)

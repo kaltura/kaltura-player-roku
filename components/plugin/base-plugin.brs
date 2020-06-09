@@ -30,7 +30,7 @@ function updateConfig(config as object) as void
     m._config = AssociativeArrayUtil().mergeDeep(config,m._config)
 end function
 
-function loadMedia() as void
+function loadMedia(mediaInfo as object) as void
 end function
 
 function destroy() as void
@@ -43,3 +43,4 @@ end function
 function getName() as string
     return m._name
 end function
+

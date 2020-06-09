@@ -7,11 +7,13 @@ end sub
 function _onLoadStatusChanged() as void
     print "[ kaltura player ] - load status " m._kalturaPlayerLib.loadStatus
     if m._kalturaPlayerLib.loadStatus = "ready"
+
+        m._kalturaPlayerLib.unobserveField("loadStatus")
         m.config = {
             "provider": {
-                "partnerId":"3009"
+                "partnerId":""
                 "env":{
-                    "serviceUrl":"https://rest-us.ott.kaltura.com/v4_5/api_v3/"
+                    "serviceUrl":""
                 }
             },
             "playback": {
@@ -41,8 +43,8 @@ function _onLoadStatusChanged() as void
             },
             "plugins":{
                 OTTAnalytics:{
-                    "serviceUrl":"https://rest-us.ott.kaltura.com/v4_5/api_v3/",
-                    "entryId": "548569",
+                    "serviceUrl":"",
+                    "entryId": "",
                     "isAnonymous": false
                 }
             }
@@ -69,9 +71,8 @@ function loaded(event as string, payload as object)
     end for
     m.kalturaPlayer.callFunc("setup", m.config)
     m.kalturaPlayer.callFunc("loadMedia", {
-        "entryId":"548569"
+        "entryId":""
     })
-
 end function
 
 function ready(event as string, payload as object)

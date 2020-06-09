@@ -21,25 +21,25 @@ function AssociativeArrayUtil() as Object
           end for
 
           return arrA
-
         end Function
 
         mergeDeep: function(target as object, source as object) as object
-
-          tmp = {}
           if source.count() = 0 then
             return target
           end if
 
           if m.isArray(target) and m.isArray(source) then
             For each item in source.Items()
-              If m.isArray(source[item.key]) = true then
-                tmp.AddReplace(item.key,{})
-                if target[item.key] = invalid then target = m.merge(target,tmp)
-                m.mergeDeep(target[item.key], source[item.key])
+              If m.isArray(item.value) = true then
+                if not target.DoesExist(item.key)
+                    target.AddReplace(item.key, source[item.key])
+                else
+                    m.mergeDeep(target[item.key], source[item.key])
+                endif
               else
-                tmp.AddReplace(item.key, item.value)
-                target = m.merge(target,tmp)
+                 tmp = {}
+                 tmp.AddReplace(item.key, item.value)
+                 target = m.merge(target,tmp)
               end If
             End For
           end if
