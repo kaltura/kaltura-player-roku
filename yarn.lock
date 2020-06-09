@@ -2514,13 +2514,17 @@ pinkie@^2.0.0:
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
   integrity sha1-clVrgM+g1IqXToDnckjoDtT3+HA=
 
-"playkit-roku-providers@https://github.com/kaltura/playkit-roku-providers.git#v1.1.0":
+"playkit-roku-ott-analytics@https://github.com/kaltura/playkit-roku-ott-analytics.git#v1.1.0":
   version "1.1.0"
-  resolved "https://github.com/kaltura/playkit-roku-providers.git#b27f27ae3271835f2f44fcba3d0a098585f68afe"
+  resolved "https://github.com/kaltura/playkit-roku-ott-analytics.git#51da1c4fe27520d2697088d93936defe6059671d"
 
-"playkit-roku@https://github.com/kaltura/playkit-roku.git#v1.1.0":
-  version "1.1.0"
-  resolved "https://github.com/kaltura/playkit-roku.git#19aa2f96fb1c15a66c1311d80faa6daee260ab3f"
+"playkit-roku-providers@https://github.com/kaltura/playkit-roku-providers.git#v1.1.1":
+  version "1.1.1"
+  resolved "https://github.com/kaltura/playkit-roku-providers.git#217ef1e7e97bd0440df1b70fbb92a0afafc09115"
+
+"playkit-roku@https://github.com/kaltura/playkit-roku.git#v1.1.1":
+  version "1.1.1"
+  resolved "https://github.com/kaltura/playkit-roku.git#9aa6fe025d17cac95939aa0a80c472c30375fd0f"
 
 prelude-ls@~1.1.2:
   version "1.1.2"
