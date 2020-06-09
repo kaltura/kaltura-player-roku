@@ -3,19 +3,24 @@ sub init()
   m._playkitLib.observeField("loadStatus", "_onLoadStatusChanged")
   m._providerLib = m.top.FindNode("PlaykitProviderLib")
   m._providerLib.observeField("loadStatus", "_onLoadStatusChanged")
+  m._ottAnaylticsLib = m.top.FindNode("PlaykitOTTAnalyticsLib")
+  m._ottAnaylticsLib.observeField("loadStatus", "_onLoadStatusChanged")
 
   _setDefaultValues()
 end sub
 
  sub _onLoadStatusChanged()
-   print "loadstatus playkit " m._playkitLib.loadStatus " provider " m._providerLib.loadStatus
-   if (m._playkitLib.loadStatus = "ready" and m._providerLib.loadStatus = "ready")
+   print "core " m._playkitLib.loadStatus " provider " m._providerLib.loadStatus " analytics " m._ottAnaylticsLib.loadStatus
+   if (m._playkitLib.loadStatus = "ready" and m._providerLib.loadStatus = "ready" and m._ottAnaylticsLib.loadStatus = "ready")
 
      m._playkitLib.unobserveField("loadStatus")
      m._providerLib.unobserveField("loadStatus")
+     m._ottAnaylticsLib.unobserveField("loadStatus")
 
      m._player = CreateObject("roSGNode", "PlaykitLib:Player")
      m._events = AssociativeArrayUtil().mergeDeep(m._events, m._player.callFunc("getPlayerEvents"))
+
+     m._pluginManager = CreateObject("roSGNode", "PluginManager")
      m._provider = CreateObject("roSGNode", "PlaykitProviderLib:OTTProvider")
 
      m._loadedState = true
@@ -87,20 +92,52 @@ function ready() as boolean
   return m._readyState
 end function
 
+function _configureOrLoadPlugins(plugins as object) as object
+  plugins_tmp = plugins
+  if plugins <> invalid
+    for each key in plugins.Keys()
+      plugin = m._pluginManager.callFunc("get",key)
+      if plugin <> invalid
+        plugin.callFunc("updateConfig",plugins[key])
+        plugins_tmp.AddReplace(key, plugin.callFunc("getConfig"))
+      else
+        if m._player.callFunc("getSrc") <> ""
+          plugins_tmp.Delete(key)
+        else
+          m._pluginManager.callFunc("load",key,m.top,plugins[key])
+        end if
+      end if
+    end for
+  end if
+  return plugins_tmp
+end function
+
+function createRequestBuilder() as object
+    return CreateObject("roSGNode", "PlaykitProviderLib:RequestBuilder")
+end function
+
 function getKalturaPlayerEvents() as object
   return m._events
+end function
+
+function configure(config={} as object) as void
+  config_tmp = AssociativeArrayUtil().mergeDeep(config, m._player.callFunc("getConfig"))
+  config_tmp.plugins = AssociativeArrayUtil().mergeDeep(_configureOrLoadPlugins(config_tmp.plugins), config_tmp.plugins)
+  m._player.callFunc("configure", config_tmp)
 end function
 
 function loadMedia(mediaInfo as object) as void
   m._mediaInfo = mediaInfo
   m._provider.observeField("responseData", "getProviderResponse")
   m._provider.callFunc("getMediaConfig",m._mediaInfo)
+  m._pluginManager.callFunc("loadMedia",mediaInfo)
 end function
 
 function setMedia(mediaConfig as object) as void
   print "[ setMedia ]"
   playerConfig = AssociativeArrayUtil().mergeDeep(mediaConfig, m._player.callFunc("getConfig"))
-  config_tmp = AssociativeArrayUtil().mergeDeep({"sources":{"poster": _selectPoster(m._player.callFunc("getConfig"), mediaConfig)}}, mediaConfig)
+  config_tmp = AssociativeArrayUtil().mergeDeep({"sources":{"poster": _selectPoster(m._player.callFunc("getConfig"), mediaConfig)}}, playerConfig)
+  config_tmp.plugins = _configureOrLoadPlugins(config_tmp.plugins)
   m._player.callFunc("configure", config_tmp)
 end function
 
@@ -131,16 +168,20 @@ end function
 
 function reset()
   m._player.callFunc("reset")
+  m._pluginManager.callFunc("reset")
   _setDefaultValues()
   _detach()
 end function
 
 function destroy()
   m._player.callFunc("destroy")
+  m._pluginManager.callFunc("destroy")
   reset()
+  m.top.removeChild(m._ottAnaylticsLib)
   m.top.removeChild(m._playkitLib)
   m.top.removeChild(m._providerLib)
   m.top.removeChild(m._player)
+  m._ottAnaylticsLib = invalid
   m._playkitLib = invalid
   m._providerLib = invalid
   m._player = invalid
