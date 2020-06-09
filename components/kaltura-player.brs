@@ -95,21 +95,23 @@ function ready() as boolean
   return m._readyState
 end function
 
-function _configureOrLoadPlugins(plugins as object) as void
+function _configureOrLoadPlugins(plugins as object) as object
+  plugins_tmp = plugins
   if plugins <> invalid
     for each key in plugins.Keys()
       if m._pluginManager.callFunc("get",key) <> invalid
         m._pluginManager.callFunc("updateConfig",plugins[key])
-        m._config.plugins.AddReplace(key,m._pluginManager.callFunc("getConfig"))
+        plugins_tmp.AddReplace(key, m._pluginManager.callFunc("getConfig"))
       else
         if m._player.callFunc("getSrc") <> ""
-          m._config.plugins.Delete(key)
+          plugins_tmp.plugins.Delete(key)
         else
           m._pluginManager.callFunc("load",key,m.top,plugins[key])
         end if
       end if
     end for
   end if
+  return plugins_tmp
 end function
 
 function createRequestBuilder() as object
@@ -121,8 +123,9 @@ function getKalturaPlayerEvents() as object
 end function
 
 function configure(config as object) as void
-  _configureOrLoadPlugins(m._player.callFunc("getConfig").plugins)
-  m._player.callFunc("configure", config)
+  config_tmp = AssociativeArrayUtil().mergeDeep(config, m._player.callFunc("getConfig"))
+  config_tmp = AssociativeArrayUtil().mergeDeep({plugins:_configureOrLoadPlugins(config.plugins)}, config)
+  m._player.callFunc("configure", newConfig)
 end function
 
 function loadMedia(mediaInfo as object) as void
@@ -135,7 +138,7 @@ function setMedia(mediaConfig as object) as void
   print "[ setMedia ]"
   playerConfig = AssociativeArrayUtil().mergeDeep(mediaConfig, m._player.callFunc("getConfig"))
   config_tmp = AssociativeArrayUtil().mergeDeep({"sources":{"poster": _selectPoster(m._player.callFunc("getConfig"), mediaConfig)}}, mediaConfig)
-  _configureOrLoadPlugins(m._player.callFunc("getConfig").plugins)
+  config_tmp = AssociativeArrayUtil().mergeDeep({plugins:_configureOrLoadPlugins(config_tmp.plugins)}, config_tmp)
   m._player.callFunc("configure", config_tmp)
 end function
 

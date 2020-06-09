@@ -49,6 +49,7 @@ function _onLoadStatusChanged() as void
         }
 
         m.kalturaPlayer = CreateObject("roSGNode", "KalturaPlayerLib:KalturaPlayer")
+        m.top.appendChild(m.kalturaPlayer)
         kalturaPlayerEvent = m.kalturaPlayer.callFunc("getKalturaPlayerEvents")
         m.kalturaPlayer.callFunc("addEventListener", kalturaPlayerEvent.KALTURA_PLAYER_LOADED, m.top, "loaded")
         m.kalturaPlayer.callFunc("addEventListener", kalturaPlayerEvent.MEDIA_LOADED, m.top, "ready")
