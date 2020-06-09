@@ -27,6 +27,6 @@ function unregister(pluginsName=invalid as string) as boolean
 end function
 
 function getPlugins() as object
-    print "getPlugins"
+    print "getPlugins" m._plugins
     return m._plugins
 end function

@@ -7,7 +7,6 @@ end sub
 function load(name as string, player as object, config={} as Object) as boolean
     print "[ pluginManager ] - load plugin"
     plugins = m.global.pluginRegister.callFunc("getPlugins")
-    print plugins
     if not plugins.DoesExist(name)
         print " Plugin " name " loading failed, plugin is not registered "
         return false
@@ -55,7 +54,6 @@ endfunction
 
 
 function get(name as string) as object
-    print "get"
     return m._activePlugins.LookupCI(name)
 endfunction
 
