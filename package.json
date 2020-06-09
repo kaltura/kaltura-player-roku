@@ -12,7 +12,7 @@
     "publish": "git push --follow-tags --no-verify origin master"
   },
   "devDependencies": {
-    "conventional-github-releaser": "1.1.13",
+    "conventional-github-releaser": "^1.1.13",
     "eslint": "^6.8.0",
     "eslint-plugin-roku": "^1.4.1",
     "roku-deploy": "^3.0.1",

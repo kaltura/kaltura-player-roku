@@ -568,7 +568,7 @@ conventional-commits-parser@^2.1.1, conventional-commits-parser@^2.1.7:
     through2 "^2.0.0"
     trim-off-newlines "^1.0.0"
 
-conventional-github-releaser@1.1.13:
+conventional-github-releaser@^1.1.13:
   version "1.1.13"
   resolved "https://registry.yarnpkg.com/conventional-github-releaser/-/conventional-github-releaser-1.1.13.tgz#0be7b3a7c7867e888be526475a590ff59303517c"
   integrity sha1-C+ezp8eGfoiL5SZHWlkP9ZMDUXw=

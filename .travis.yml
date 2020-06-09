@@ -1,0 +1,32 @@
+conditions: v1
+sudo: required
+dist: xenial
+language: node_js
+node_js:
+  - "9.11.1"
+
+addons:
+  chrome: stable
+
+services:
+  - xvfb
+cache:
+  yarn: true
+  directories:
+    - node_modules
+
+before_install:
+ - export DISPLAY=:99.0
+
+stages:
+  - Release
+
+jobs:
+  fast_finish: true
+  include:
+    # https://docs.travis-ci.com/user/build-stages/deploy-github-releases/
+    - stage: Release
+      name: "Releasing a new version"
+      if: tag IS present
+      script:
+        - conventional-github-releaser -t "$GH_TOKEN"
