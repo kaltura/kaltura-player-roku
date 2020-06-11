@@ -15,7 +15,7 @@ function AssociativeArrayUtil() as Object
           if not m.isArray(arrB) = true then return arrA
 
            for each item in arrB.Items()
-              If not arrA.DoesExist(item.key)
+              If (not arrA.DoesExist(item.key) or arrA[item.key] = Invalid) and item.value <> Invalid
                 arrA[item.key] = item.value
               End If
           end for
