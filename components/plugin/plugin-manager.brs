@@ -4,7 +4,7 @@ sub init()
     m._disabledPlugins = {}
 end sub
 
-function load(name as string, player as object, config={} as Object) as boolean
+function load(name as string, player as object, config={} as object) as boolean
     print "[ pluginManager ] - load plugin"
     if config.name <> invalid
         componentName = config.name
@@ -28,7 +28,7 @@ function load(name as string, player as object, config={} as Object) as boolean
         if not pluginObj.callFunc("isValid")
             return false
         end if
-        pluginObj.callFunc("initialize",name, player, config)
+        pluginObj.callFunc("initialize", name, player, config)
         m._activePlugins.AddReplace(name, pluginObj)
         return true
     end if

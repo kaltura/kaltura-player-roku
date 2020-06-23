@@ -4,18 +4,17 @@ sub init()
   m._providerLib = m.top.FindNode("PlaykitProviderLib")
   m._providerLib.observeField("loadStatus", "_onLoadStatusChanged")
   m._ottAnaylticsLib = m.top.FindNode("PlaykitOTTAnalyticsLib")
-  m._ottAnaylticsLib.observeField("loadStatus", "_onLoadStatusChanged")
+  m._kavaLib = m.top.FindNode("PlaykitKavaLib")
 
   _setDefaultValues()
 end sub
 
  sub _onLoadStatusChanged()
-   print "core " m._playkitLib.loadStatus " provider " m._providerLib.loadStatus " analytics " m._ottAnaylticsLib.loadStatus
-   if (m._playkitLib.loadStatus = "ready" and m._providerLib.loadStatus = "ready" and m._ottAnaylticsLib.loadStatus = "ready")
+   print "core " m._playkitLib.loadStatus " provider " m._providerLib.loadStatus
+   if (m._playkitLib.loadStatus = "ready" and m._providerLib.loadStatus = "ready")
 
      m._playkitLib.unobserveField("loadStatus")
      m._providerLib.unobserveField("loadStatus")
-     m._ottAnaylticsLib.unobserveField("loadStatus")
 
      m._player = CreateObject("roSGNode", "PlaykitLib:Player")
      m._events = AssociativeArrayUtil().mergeDeep(m._events, m._player.callFunc("getPlayerEvents"))
@@ -135,6 +134,7 @@ end function
 
 function setMedia(mediaConfig as object) as void
   print "[ setMedia ]"
+  print mediaConfig.session
   playerConfig = AssociativeArrayUtil().mergeDeep(mediaConfig, m._player.callFunc("getConfig"))
   config_tmp = AssociativeArrayUtil().mergeDeep({"sources":{"poster": _selectPoster(m._player.callFunc("getConfig"), mediaConfig)}}, playerConfig)
   plugins = evaluatePluginsConfig(config_tmp)
@@ -178,10 +178,12 @@ function destroy()
   m._player.callFunc("destroy")
   m._pluginManager.callFunc("destroy")
   reset()
+  m.top.removeChild(m._kavaLib)
   m.top.removeChild(m._ottAnaylticsLib)
   m.top.removeChild(m._playkitLib)
   m.top.removeChild(m._providerLib)
   m.top.removeChild(m._player)
+  m._kavaLib = invalid
   m._ottAnaylticsLib = invalid
   m._playkitLib = invalid
   m._providerLib = invalid
@@ -283,6 +285,26 @@ end function
 
 function setWidth(width as integer) as void
   m._player.callFunc("setWidth",width)
+end function
+
+function getStreamType() as string
+  return m._player.callFunc("getStreamType")
+end function
+
+function isDvr() as boolean
+  return m._player.callFunc("isDvr")
+end function
+
+function getActiveVideoTrack() as object
+  return m._player.callFunc("getActiveVideoTrack")
+end function
+
+function getDownloadedTracks() as object
+  return m._player.callFunc("getDownloadedTracks")
+end function
+
+function getTimeToStartStream() as object
+  return m._player.callFunc("getTimeToStartStream")
 end function
 
 sub getProviderResponse()

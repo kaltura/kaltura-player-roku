@@ -2,18 +2,20 @@ sub init() as void
     m.top.setFocus(true)
     m._kalturaPlayerLib = m.top.FindNode("KalturaPlayerLib")
     m._kalturaPlayerLib.observeField("loadStatus", "_onLoadStatusChanged")
+    m._kava = m.top.FindNode("PlaykitKavaLib")
+    m._kava.observeField("loadStatus", "_onLoadStatusChanged")
 end sub
 
 function _onLoadStatusChanged() as void
-    print "[ kaltura player ] - load status " m._kalturaPlayerLib.loadStatus
-    if m._kalturaPlayerLib.loadStatus = "ready"
+    print "[ kaltura player ] - load status " m._kalturaPlayerLib.loadStatus "m._kava" m._kava.loadStatus
+    if m._kalturaPlayerLib.loadStatus = "ready" and m._kava.loadStatus = "ready"
 
         m._kalturaPlayerLib.unobserveField("loadStatus")
         m.config = {
             "provider": {
-                "partnerId":""
+                "partnerId":"3009"
                 "env":{
-                    "serviceUrl":""
+                    "serviceUrl":"https://rest-us.ott.kaltura.com/v4_5/api_v3/"
                 }
             },
             "playback": {
@@ -43,9 +45,17 @@ function _onLoadStatusChanged() as void
             },
             "plugins":{
                 OTTAnalytics:{
-                    "serviceUrl":"",
-                    "entryId": "",
                     "isAnonymous": false
+                },
+                kava:{
+                    serviceUrl: "//analytics.kaltura.com/api_v3/index.php",
+                    viewEventCountdown: 10,
+                    resetSessionCountdown: 30,
+                    dvrThreshold: 120,
+                    playbackContext: "",
+                    applicationVersion: "",
+                    partnerId:"1740481",
+                    entryId:"0_wifq1111"
                 }
             }
         }
@@ -71,7 +81,7 @@ function loaded(event as string, payload as object)
     end for
     m.kalturaPlayer.callFunc("setup", m.config)
     m.kalturaPlayer.callFunc("loadMedia", {
-        "entryId":""
+        "entryId":"548569"
     })
 end function
 

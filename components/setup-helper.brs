@@ -7,9 +7,24 @@ function evaluatePluginsConfig(config as object) as object
             isAnonymous: invalid,
             partnerId: invalid,
             serviceUrl: invalid
+        },
+        kava: {
+            playerVersion: invalid,
+            playerName: invalid,
+            partnerId: invalid,
+            playlistId: invalid,
+            entryId: invalid,
+            entryType: invalid,
+            sessionId: invalid,
+            ks: invalid,
+            uiConfId: invalid,
+            referrer: invalid,
+            encodedReferrer: invalid
         }
     }
 
+    print config
+    print config.session
     commonConfig = _fetchDataFromConfig(config)
     pluginsConfig = {}
     for each plugin in defaultConfig.Items()
@@ -22,7 +37,9 @@ function evaluatePluginsConfig(config as object) as object
         end for
         pluginsConfig[plugin.key] = pluginConfig
     end for
-    return AssociativeArrayUtil().mergeDeep(config.plugins,pluginsConfig)
+    conf = AssociativeArrayUtil().mergeDeep(config.plugins,pluginsConfig)
+    print conf
+    return conf
 end function
 
 function _fetchDataFromConfig(config as object) as object

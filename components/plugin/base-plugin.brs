@@ -8,13 +8,13 @@ function _setDefaultValues() as void
     m._player = {}
 end function
 
-function _initialize(name as string, player as object, config={} as object) as void
+function _initialize(name as string, player as object, config as object) as void
     m._name = name
     m._player = player
     m._config = config
 end function
 
-function initialize(name as string, player as object, config={} as object) as void
+function initialize(name as string, player as object, config as object) as void
     _initialize(name,player,config)
 end function
 
