@@ -23,8 +23,6 @@ function evaluatePluginsConfig(config as object) as object
         }
     }
 
-    print config
-    print config.session
     commonConfig = _fetchDataFromConfig(config)
     pluginsConfig = {}
     for each plugin in defaultConfig.Items()
@@ -38,7 +36,6 @@ function evaluatePluginsConfig(config as object) as object
         pluginsConfig[plugin.key] = pluginConfig
     end for
     conf = AssociativeArrayUtil().mergeDeep(config.plugins,pluginsConfig)
-    print conf
     return conf
 end function
 
@@ -83,4 +80,35 @@ function _fetchDataFromConfig(config as object) as object
 
     return model
 
+end function
+
+function handleSessionId(config as object) as object
+    if config.session <> invalid and config.session.id <> invalid
+        return updateSessionId(config)
+    else
+        return addSessionID(config)
+    end if
+end function
+
+function updateSessionId(config as object) as object
+    r = CreateObject("roRegex", "/:((?:[a-z0-9]|-)*)/", "i")
+    secondGuid = r.MatchAll(config.session.id)
+    if secondGuid <> invalid and secondGuid[1] <> invalid
+        return setSessionID(config, r.Replace(config.session.id,":" + CreateObject("roDeviceInfo").GetRandomUUID()))
+    end if
+    return config
+end function
+
+function addSessionID(config as object) as object
+    primaryGuid = CreateObject("roDeviceInfo").GetRandomUUID()
+    secondGuid = CreateObject("roDeviceInfo").GetRandomUUID()
+    setSessionID(config, primaryGuid + ":" + secondGuid)
+end function
+
+function setSessionID(config, sessionId) as object
+    if config.session = invalid
+        config.session = {}
+    end if
+    config.session.id = sessionId
+    return config
 end function
