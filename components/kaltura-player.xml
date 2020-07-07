@@ -59,6 +59,7 @@
         <ComponentLibrary id="PlaykitKavaLib" uri="pkg:/source/playkit-roku-kava.zip" />
     </children>
 
+    <script type="text/brightscript" uri="pkg:/components/utils/string.brs"/>
     <script type="text/brightscript" uri="pkg:/components/utils/associative-array.brs"/>
     <script type="text/brightscript" uri="pkg:/components/poster.brs"/>
     <script type="text/brightscript" uri="pkg:/components/setup-helper.brs"/>

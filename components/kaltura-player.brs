@@ -134,11 +134,12 @@ end function
 
 function setMedia(mediaConfig as object) as void
   print "[ setMedia ]"
-  print mediaConfig.session
   playerConfig = AssociativeArrayUtil().mergeDeep(mediaConfig, m._player.callFunc("getConfig"))
   config_tmp = AssociativeArrayUtil().mergeDeep({"sources":{"poster": _selectPoster(m._player.callFunc("getConfig"), mediaConfig)}}, playerConfig)
+  config_tmp = addKalturaParams(config_tmp)
   plugins = evaluatePluginsConfig(config_tmp)
   config_tmp.plugins = _configureOrLoadPlugins(plugins)
+
   m._player.callFunc("configure", config_tmp)
 end function
 
