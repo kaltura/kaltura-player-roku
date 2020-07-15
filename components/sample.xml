@@ -10,7 +10,6 @@
 
     <children>
         <ComponentLibrary id="KalturaPlayerLib" uri="pkg:/source/kaltura-player-roku.zip" />
-        <ComponentLibrary id="PlaykitKavaLib" uri="pkg:/source/playkit-roku-kava.zip" />
     </children>
 
 </component>
