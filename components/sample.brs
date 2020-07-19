@@ -2,13 +2,11 @@ sub init() as void
     m.top.setFocus(true)
     m._kalturaPlayerLib = m.top.FindNode("KalturaPlayerLib")
     m._kalturaPlayerLib.observeField("loadStatus", "_onLoadStatusChanged")
-    m._kava = m.top.FindNode("PlaykitKavaLib")
-    m._kava.observeField("loadStatus", "_onLoadStatusChanged")
 end sub
 
 function _onLoadStatusChanged() as void
-    print "[ kaltura player ] - load status " m._kalturaPlayerLib.loadStatus "m._kava" m._kava.loadStatus
-    if m._kalturaPlayerLib.loadStatus = "ready" and m._kava.loadStatus = "ready"
+    print "[ kaltura player ] - load status " m._kalturaPlayerLib.loadStatus
+    if m._kalturaPlayerLib.loadStatus = "ready"
 
         m._kalturaPlayerLib.unobserveField("loadStatus")
         m.config = {

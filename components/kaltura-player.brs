@@ -121,7 +121,8 @@ end function
 
 function configure(config={} as object) as void
   config_tmp = AssociativeArrayUtil().mergeDeep(config, m._player.callFunc("getConfig"))
-  config_tmp.plugins = AssociativeArrayUtil().mergeDeep(_configureOrLoadPlugins(config_tmp.plugins), config_tmp.plugins)
+  configPlugins = _configureOrLoadPlugins(config_tmp.plugins)
+  config_tmp.plugins = AssociativeArrayUtil().mergeDeep(configPlugins, config_tmp.plugins)
   m._player.callFunc("configure", config_tmp)
 end function
 

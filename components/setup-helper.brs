@@ -196,7 +196,7 @@ function addKalturaParams(config as object) as object
                             drmData[k].licenseUrl = updateSessionIdInUrl(drmData[k].licenseUrl, _sessionId, DRM_SESSION_ID)
                             drmData[k].licenseUrl = addClientTag(drmData[k].licenseUrl)
                             drmData[k].licenseUrl = addReferrer(drmData[k].licenseUrl)
-                            drmData[k].licenseUrl = addUIConfId(drmData[k].licenseUrl, playerConfig)
+                            drmData[k].licenseUrl = addUIConfId(drmData[k].licenseUrl, config)
                         end if
                         source.drmData[k] = drmData[k]
                     end for
