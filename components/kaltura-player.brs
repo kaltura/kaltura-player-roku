@@ -1,19 +1,26 @@
 sub init()
   print "[ kaltura player ] - init"
-  m._playkitLib = m.top.FindNode("PlaykitLib")
-  m._providerLib = m.top.FindNode("PlaykitProviderLib")
-  if m._playkitLib.loadStatus = "ready" and m._providerLib.loadStatus = "ready"
-    _onLoadStatusChanged()
-  else
-    m._playkitLib.observeField("loadStatus", "_onLoadStatusChanged")
-    m._providerLib.observeField("loadStatus", "_onLoadStatusChanged")
-  end if
-  m._ottAnaylticsLib = m.top.FindNode("PlaykitOTTAnalyticsLib")
-  m._kavaLib = m.top.FindNode("PlaykitKavaLib")
+
+  m._playkitLib = createLib("PlaykitLib","pkg:/source/playkit-roku.zip")
+  m._providerLib = createLib("PlaykitProviderLib","pkg:/source/playkit-roku-providers.zip")
+  m._ottAnaylticsLib = createLib("PlaykitOTTAnalyticsLib","pkg:/source/playkit-roku-ott-analytics.zip",false)
+  m._kavaLib = createLib("PlaykitKavaLib","pkg:/source/playkit-roku-kava.zip",false)
   m._events = _getEvents()
 
   _setDefaultValues()
 end sub
+
+sub createLib(id as string, uri as string, isLoadStatusNeeded=true as boolean) as object
+  lib = createObject("roSGNode", "ComponentLibrary")
+  lib.id = id
+  lib.uri = uri
+  if isLoadStatusNeeded
+    lib.observeField("loadStatus", "_onLoadStatusChanged")
+  endif
+  m.top.appendChild(lib)
+  return lib
+end sub
+
 
  sub _onLoadStatusChanged()
    print "core " m._playkitLib.loadStatus " provider " m._providerLib.loadStatus
@@ -77,11 +84,6 @@ end function
 
 function _initialize(config as object)
   print "[ initialize kaltura player ]"
-  print m._player " player " m._provider " provider"
-  if m._player = invalid and m._provider = invalid
-    _onLoadStatusChanged()
-  endif
-  print m._player " player " m._provider " provider"
   m._isInitialized = true
   if config = invalid then
     print "[ kaltura player ] - there isn't config object"
@@ -193,8 +195,17 @@ function destroy()
   reset()
   m._pluginManager.callFunc("destroy")
   m._player.callFunc("destroy")
+  m.top.removeChild(m._playkitLib)
+  m.top.removeChild(m._providerLib)
+  m.top.removeChild(m._ottAnaylticsLib)
+  m.top.removeChild(m._kavaLib)
+  m.top.removeChild(m._player)
+  m._playkitLib = invalid
   m._player = invalid
+  m._providerLib = invalid
   m._provider = invalid
+  m._ottAnaylticsLib = invalid
+  m._kavaLib = invalid
 end function
 
 function play() as void
