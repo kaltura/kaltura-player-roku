@@ -1,10 +1,16 @@
 sub init()
+  print "[ kaltura player ] - init"
   m._playkitLib = m.top.FindNode("PlaykitLib")
-  m._playkitLib.observeField("loadStatus", "_onLoadStatusChanged")
   m._providerLib = m.top.FindNode("PlaykitProviderLib")
-  m._providerLib.observeField("loadStatus", "_onLoadStatusChanged")
+  if m._playkitLib.loadStatus = "ready" and m._providerLib.loadStatus = "ready"
+    _onLoadStatusChanged()
+  else
+    m._playkitLib.observeField("loadStatus", "_onLoadStatusChanged")
+    m._providerLib.observeField("loadStatus", "_onLoadStatusChanged")
+  end if
   m._ottAnaylticsLib = m.top.FindNode("PlaykitOTTAnalyticsLib")
   m._kavaLib = m.top.FindNode("PlaykitKavaLib")
+  m._events = _getEvents()
 
   _setDefaultValues()
 end sub
@@ -57,8 +63,7 @@ end function
 function _setDefaultValues()
   m._loadedState = false
   m._readyState = false
-  m._events = _getEvents()
-  m._isInitialized = invalid
+  m._isInitialized = false
   m._mediaInfo = invalid
 end function
 
@@ -72,8 +77,16 @@ end function
 
 function _initialize(config as object)
   print "[ initialize kaltura player ]"
+  print m._player " player " m._provider " provider"
+  if m._player = invalid and m._provider = invalid
+    _onLoadStatusChanged()
+  endif
+  print m._player " player " m._provider " provider"
   m._isInitialized = true
-  if config = invalid then return invalid
+  if config = invalid then
+    print "[ kaltura player ] - there isn't config object"
+    return invalid
+  endif
   m._player.callFunc("initialize", config)
   m._provider.callFunc("initialize",config.provider)
   _attach()
@@ -170,25 +183,16 @@ function getPoster() as string
 end function
 
 function reset()
-  m._player.callFunc("reset")
   m._pluginManager.callFunc("reset")
+  m._player.callFunc("reset")
   _setDefaultValues()
   _detach()
 end function
 
 function destroy()
-  m._player.callFunc("destroy")
-  m._pluginManager.callFunc("destroy")
   reset()
-  m.top.removeChild(m._kavaLib)
-  m.top.removeChild(m._ottAnaylticsLib)
-  m.top.removeChild(m._playkitLib)
-  m.top.removeChild(m._providerLib)
-  m.top.removeChild(m._player)
-  m._kavaLib = invalid
-  m._ottAnaylticsLib = invalid
-  m._playkitLib = invalid
-  m._providerLib = invalid
+  m._pluginManager.callFunc("destroy")
+  m._player.callFunc("destroy")
   m._player = invalid
   m._provider = invalid
 end function
@@ -307,6 +311,13 @@ end function
 
 function getTimeToStartStream() as object
   return m._player.callFunc("getTimeToStartStream")
+end function
+
+function onKeyEvent(key as String, press as Boolean) as Boolean
+  if m.top.hasFocus()
+    m._player.setFocus(true)
+  end if
+  return false
 end function
 
 sub getProviderResponse()

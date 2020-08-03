@@ -46,7 +46,8 @@ function destroy() as void
     for each key in m._activePlugins
         m._activePlugins.LookupCI(key).callFunc("destroy")
     end for
-    m._activePlugins = invalid
+    m._disabledPlugins = {}
+    m._activePlugins = {}
 endfunction
 
 function reset() as void

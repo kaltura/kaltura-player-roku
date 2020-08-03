@@ -27,11 +27,11 @@ function removeEventListener(eventType as string, element as object, functionNam
 
 end function
 
-function removeEventListeners(eventType as string) as void
+function removeEventListeners(eventType as string, element as object) as void
 
     listeners = []
     for i = 0 to m.listeners.count() - 1
-        if m.listeners[i]["eventType"] <> eventType then
+        if not (m.listeners[i]["eventType"] = eventType and m.listeners[i]["element"].cId = element.cId) then
             listeners.push(m.listeners[i])
         end if
     end for
