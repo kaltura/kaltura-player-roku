@@ -93,10 +93,10 @@ function handleSessionId(config as object) as object
 end function
 
 function updateSessionId(config as object) as object
-    r = CreateObject("roRegex", "/:((?:[a-z0-9]|-)*)/", "i")
-    secondGuid = r.MatchAll(config.session.id)
+    r = CreateObject("roRegex", ":((?:[a-z0-9]|-)*)", "i")
+    secondGuid = r.Match(StringUtil().toString(config.session.id))
     if secondGuid <> invalid and secondGuid[1] <> invalid
-        return setSessionID(config, r.Replace(config.session.id,":" + CreateObject("roDeviceInfo").GetRandomUUID()))
+        return setSessionID(config, r.Replace(config.session.id, ":" + CreateObject("roDeviceInfo").GetRandomUUID()))
     end if
     return config
 end function
@@ -152,9 +152,9 @@ end function
 function updateSessionIdInUrl(url as string, sessionId as string, paramName="playSessionId=" as string ) as string
     if sessionId <> invalid
         r = CreateObject("roRegex", paramName + "((?:[a-z0-9]|-)*:(?:[a-z0-9]|-)*)", "i")
-        sessionIdInUrl = r.MatchAll(url)
+        sessionIdInUrl = r.Match(StringUtil().toString(url))
         if sessionIdInUrl <> invalid and sessionIdInUrl[1] <> invalid
-            url = r.Replace(paramName+sessionId)
+            url = r.Replace(StringUtil().toString(url), paramName + sessionId)
         else
             url += getQueryStringParamDelimiter(url) + paramName + sessionId
         end if
