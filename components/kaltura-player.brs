@@ -3,8 +3,8 @@ sub init()
 
   m._playkitLib = createLib("PlaykitLib","pkg:/source/playkit-roku.zip")
   m._providerLib = createLib("PlaykitProviderLib","pkg:/source/playkit-roku-providers.zip")
-  m._ottAnaylticsLib = createLib("PlaykitOTTAnalyticsLib","pkg:/source/playkit-roku-ott-analytics.zip",false)
-  m._kavaLib = createLib("PlaykitKavaLib","pkg:/source/playkit-roku-kava.zip",false)
+'  m._ottAnaylticsLib = createLib("PlaykitOTTAnalyticsLib","pkg:/source/playkit-roku-ott-analytics.zip",false)
+'  m._kavaLib = createLib("PlaykitKavaLib","pkg:/source/playkit-roku-kava.zip",false)
   m._events = _getEvents()
 
   _setDefaultValues()
@@ -197,15 +197,15 @@ function destroy()
   m._player.callFunc("destroy")
   m.top.removeChild(m._playkitLib)
   m.top.removeChild(m._providerLib)
-  m.top.removeChild(m._ottAnaylticsLib)
-  m.top.removeChild(m._kavaLib)
+'  m.top.removeChild(m._ottAnaylticsLib)
+'  m.top.removeChild(m._kavaLib)
   m.top.removeChild(m._player)
   m._playkitLib = invalid
   m._player = invalid
   m._providerLib = invalid
   m._provider = invalid
-  m._ottAnaylticsLib = invalid
-  m._kavaLib = invalid
+'  m._ottAnaylticsLib = invalid
+'  m._kavaLib = invalid
 end function
 
 function play() as void
