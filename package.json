@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "license": "AGPL-3.0",
   "scripts": {
-    "postinstall": "cp node_modules/playkit-roku/out/playkit-roku.zip source && cp node_modules/playkit-roku-providers/out/playkit-roku-providers.zip source && cp node_modules/playkit-roku-ott-analytics/out/playkit-roku-ott-analytics.zip source",
+    "postinstall": "cp node_modules/playkit-roku/out/playkit-roku.zip source && cp node_modules/playkit-roku-providers/out/playkit-roku-providers.zip source",
     "deploy": "roku-deploy",
     "clean": "rm -rf ./out/*",
     "build": "filename=$(cat ./rokudeploy.json | jq -j '.outFile') && zip -9 -r ./out/$filename.zip './source' './components' './images' 'manifest'",
@@ -32,8 +32,7 @@
   },
   "homepage": "https://github.com/kaltura/kaltura-player-roku#readme",
   "dependencies": {
-    "playkit-roku": "https://github.com/kaltura/playkit-roku.git#v1.1.1",
-    "playkit-roku-ott-analytics": "https://github.com/kaltura/playkit-roku-ott-analytics.git#v1.1.0",
-    "playkit-roku-providers": "https://github.com/kaltura/playkit-roku-providers.git#v1.1.1"
+    "playkit-roku": "https://github.com/kaltura/playkit-roku.git#v1.2.0",
+    "playkit-roku-providers": "https://github.com/kaltura/playkit-roku-providers.git#v1.2.0"
   }
 }
