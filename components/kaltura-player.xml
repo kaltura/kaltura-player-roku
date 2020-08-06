@@ -45,14 +45,14 @@
         <function name="getHeight" />
         <function name="setWidth" />
         <function name="getWidth" />
+        <function name="getStreamType" />
+        <function name="isDvr" />
+        <function name="getActiveVideoTrack" />
+        <function name="getDownloadedTracks" />
+        <function name="getTimeToStartStream" />
     </interface>
 
-    <children>
-        <ComponentLibrary id="PlaykitProviderLib" uri="pkg:/source/playkit-roku-providers.zip" />
-        <ComponentLibrary id="PlaykitLib" uri="pkg:/source/playkit-roku.zip" />
-        <ComponentLibrary id="PlaykitOTTAnalyticsLib" uri="pkg:/source/playkit-roku-ott-analytics.zip" />
-    </children>
-
+    <script type="text/brightscript" uri="pkg:/components/utils/string.brs"/>
     <script type="text/brightscript" uri="pkg:/components/utils/associative-array.brs"/>
     <script type="text/brightscript" uri="pkg:/components/poster.brs"/>
     <script type="text/brightscript" uri="pkg:/components/setup-helper.brs"/>
