@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Home - Documentation</title>
+    <title>components/utils/string.brs - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,25 +29,109 @@
 
 <div id="main">
     
+    <h1 class="page-title">components/utils/string.brs</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'
+'   string.brs
+'
+'
+function StringUtil() as Object
 
+    util = {
 
+        isString: function(value) as Boolean
+            return type(value) = "String" or type(value) = "roString"
+        end function
 
+        charAt: function(str as String, index=0 as Integer) as String
+            return str.mid(index, 1)
+        end function
 
+        contains: function(str as String, substr as String, position=0 as Integer) as Boolean
+            return m.indexOf(str, substr, position) >= 0
+        end function
 
+        indexOf: function(str as String, substr as String, position=0 as Integer) as Integer
+            return LCase(str).instr(position, LCase(substr))
+        end function
 
+        match: function(str as String, regex as String, flag="" as String) as Object
+            regexObj = CreateObject("roRegex", regex, flag)
+            return regexObj.match(str)
+        end function
 
+        replace: function(str as String, pattern as String, replacement as String) as String
+            regexObj = createObject("roRegex", pattern, "")
+            return regexObj.replaceAll(str, replacement)
+        end function
 
+        truncate: function(str as String, length as Integer, ellipsis="" as String) as String
+            truncated = str
+            if truncated.len() > length then
+                truncated = truncated.left(length) + ellipsis
+            end if
+            return truncated
+        end function
 
-    
+        concat: function(str as String, value) as String
+            return str + m.toString(value)
+        end function
 
+        toString: function(variable As Dynamic) As String
+            If Type(variable) = "roInt" Or Type(variable) = "roInteger" Or Type(variable) = "roFloat" Or Type(variable) = "Float" Then
+                Return Str(variable).Trim()
+            Else If Type(variable) = "roBoolean" Or Type(variable) = "Boolean" Then
+                If variable = True Then
+                    Return "True"
+                End If
+                Return "False"
+            Else If Type(variable) = "roString" Or Type(variable) = "String" Then
+                Return variable
+            Else
+                Return Type(variable)
+            End If
+        end function
 
+        toMD5: function(str as String) as String
+            return m._hash(str, "md5")
+        end function
 
+        toSHA1: function(str as String) as String
+            return m._hash(str, "sha1")
+        end function
+
+        toSHA256: function(str as String) as String
+            return m._hash(str, "sha256")
+        end function
+
+        toSHA512: function(str as String) as String
+            return m._hash(str, "sha512")
+        end function
+
+        _hash: function(msg as String, algorithm="md5" as String) as String
+            ba = createObject("roByteArray")
+            ba.fromAsciiString(msg)
+            digest = createObject("roEVPDigest")
+            digest.setup(algorithm)
+            return digest.process(ba)
+        end function
+
+    }
+
+    return util
+
+end function
+</code></pre>
+        </article>
+    </section>
 
 
 
