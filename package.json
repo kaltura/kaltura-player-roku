@@ -14,14 +14,13 @@
     "publish": "git push --follow-tags --no-verify origin master"
   },
   "devDependencies": {
-    "brs": "^0.18.2",
-    "conventional-github-releaser": "^1.1.13",
-    "eslint": "^6.8.0",
+    "brs": "^0.25.1",
+    "conventional-github-releaser": "^3.1.5",
     "eslint-plugin-roku": "^1.4.1",
-    "jsdoc": "^3.6.3",
+    "jsdoc": "^3.6.5",
     "minami": "^1.2.3",
-    "roku-deploy": "^3.0.1",
-    "standard-version": "^4.2.0"
+    "roku-deploy": "^3.2.2",
+    "standard-version": "^8.0.2"
   },
   "repository": {
     "type": "git",
