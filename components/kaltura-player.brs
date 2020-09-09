@@ -3,9 +3,11 @@ sub init()
 
   m._playkitLib = createLib("PlaykitLib","pkg:/source/playkit-roku.zip")
   m._providerLib = createLib("PlaykitProviderLib","pkg:/source/playkit-roku-providers.zip")
-'  m._ottAnaylticsLib = createLib("PlaykitOTTAnalyticsLib","pkg:/source/playkit-roku-ott-analytics.zip",false)
-'  m._kavaLib = createLib("PlaykitKavaLib","pkg:/source/playkit-roku-kava.zip",false)
+  m._ottAnaylticsLib = createLib("PlaykitOTTAnalyticsLib","pkg:/source/playkit-roku-ott-analytics.zip",false)
+  m._kavaLib = createLib("PlaykitKavaLib","pkg:/source/playkit-roku-kava.zip",false)
   m._events = _getEvents()
+  m._loadedState = false
+  m._isInitialized = false
 
   _setDefaultValues()
 end sub
@@ -20,7 +22,6 @@ sub createLib(id as string, uri as string, isLoadStatusNeeded=true as boolean) a
   m.top.appendChild(lib)
   return lib
 end sub
-
 
  sub _onLoadStatusChanged()
    print "core " m._playkitLib.loadStatus " provider " m._providerLib.loadStatus
@@ -67,22 +68,22 @@ function _detach() as object
 end function
 
 function _setDefaultValues()
-  m._loadedState = false
+  m._pluginConfig = {}
   m._readyState = false
-  m._isInitialized = false
   m._mediaInfo = invalid
 end function
 
-function _selectPoster(config as object,mediaConfig as object) as string
+function _selectPoster(config as object) as string
   displaySize = CreateObject("roDeviceInfo").GetDisplaySize()
-  if config <> invalid and config.sources <> invalid and mediaConfig <> invalid and mediaConfig.sources <> invalid
-    return _getKalturaPoster(config.sources,mediaConfig.sources,displaySize)
+  if config <> invalid and config.sources <> invalid
+    return _getKalturaPoster(config.sources, displaySize)
   endif
   return ""
 end function
 
 function _initialize(config as object)
   print "[ initialize kaltura player ]"
+  _reset()
   m._isInitialized = true
   if config = invalid then
     print "[ kaltura player ] - there isn't config object"
@@ -105,24 +106,23 @@ function ready() as boolean
   return m._readyState
 end function
 
-function _configureOrLoadPlugins(plugins as object) as object
-  plugins_tmp = plugins
-  if plugins <> invalid
-    for each key in plugins.Keys()
+function _configureOrLoadPlugins(pluginConfig as object)
+  if pluginConfig <> invalid
+    for each key in pluginConfig.Keys()
       plugin = m._pluginManager.callFunc("get",key)
       if plugin <> invalid
-        plugin.callFunc("updateConfig",plugins[key])
-        plugins_tmp.AddReplace(key, plugin.callFunc("getConfig"))
+        plugin.callFunc("updateConfig",pluginConfig[key])
+        pluginConfig.AddReplace(key, plugin.callFunc("getConfig"))
       else
         if m._player.callFunc("getSrc") <> ""
-          plugins_tmp.Delete(key)
+          pluginConfig.Delete(key)
         else
-          m._pluginManager.callFunc("load",key,m.top,plugins[key])
+          m._pluginManager.callFunc("load",key,m.top,pluginConfig[key])
         end if
       end if
     end for
   end if
-  return plugins_tmp
+  m._pluginConfig = pluginConfig
 end function
 
 function createRequestBuilder() as object
@@ -134,28 +134,31 @@ function getKalturaPlayerEvents() as object
 end function
 
 function configure(config={} as object) as void
-  config_tmp = AssociativeArrayUtil().mergeDeep(config, m._player.callFunc("getConfig"))
-  configPlugins = _configureOrLoadPlugins(config_tmp.plugins)
-  config_tmp.plugins = AssociativeArrayUtil().mergeDeep(configPlugins, config_tmp.plugins)
-  m._player.callFunc("configure", config_tmp)
+  configWithPlugins = AssociativeArrayUtil().mergeDeep(config, _getPlayerConfig())
+  configCopyForEvaluate = parseJson(formatJson(configWithPlugins))
+  pluginsConfig = evaluatePluginsConfig(configCopyForEvaluate)
+  _configureOrLoadPlugins(pluginsConfig)
+  m._player.callFunc("configure", configWithPlugins)
 end function
 
 function loadMedia(mediaInfo as object) as void
+  reset()
   m._mediaInfo = mediaInfo
   m._provider.observeField("responseData", "getProviderResponse")
-  m._provider.callFunc("getMediaConfig",m._mediaInfo)
+  m._provider.callFunc("getMediaConfig",mediaInfo)
   m._pluginManager.callFunc("loadMedia",mediaInfo)
 end function
 
 function setMedia(mediaConfig as object) as void
   print "[ setMedia ]"
-  playerConfig = AssociativeArrayUtil().mergeDeep(mediaConfig, m._player.callFunc("getConfig"))
-  config_tmp = AssociativeArrayUtil().mergeDeep({"sources":{"poster": _selectPoster(m._player.callFunc("getConfig"), mediaConfig)}}, playerConfig)
-  config_tmp = addKalturaParams(config_tmp)
-  plugins = evaluatePluginsConfig(config_tmp)
-  config_tmp.plugins = _configureOrLoadPlugins(plugins)
-
-  m._player.callFunc("configure", config_tmp)
+  m._readyState = false
+  sources = AssociativeArrayUtil().mergeDeep(mediaConfig.sources, _getPlayerConfig().sources)
+  session = AssociativeArrayUtil().mergeDeep(mediaConfig.session, _getPlayerConfig().session)
+  plugins = AssociativeArrayUtil().mergeDeep(mediaConfig.plugins, _getPlayerConfig().plugins)
+  playerConfig = {sources:sources, session:session, plugins:plugins}
+  playerConfig = AssociativeArrayUtil().mergeDeep({"sources":{"poster": _selectPoster(playerConfig)}}, playerConfig)
+  playerConfig = addKalturaParams(playerConfig)
+  configure(playerConfig)
 end function
 
 function getDuration() as integer
@@ -172,39 +175,44 @@ end function
 
 function getMediaConfig() as object
   return {
-    sources: m._player.callFunc("getConfig").sources
-    plugins: m._player.callFunc("getConfig").plugins
+    sources: getConfig().sources,
+    plugins: getConfig().plugins
   }
 end function
 
 function getPoster() as string
+  config = _getPlayerConfig()
   if config <> invalid and config.sources <> invalid
     return config.sources.poster
   endif
 end function
 
+function _reset()
+  _setDefaultValues()
+end function
+
 function reset()
+  _reset()
   m._pluginManager.callFunc("reset")
   m._player.callFunc("reset")
-  _setDefaultValues()
-  _detach()
 end function
 
 function destroy()
   reset()
+  _detach()
   m._pluginManager.callFunc("destroy")
   m._player.callFunc("destroy")
   m.top.removeChild(m._playkitLib)
   m.top.removeChild(m._providerLib)
-'  m.top.removeChild(m._ottAnaylticsLib)
-'  m.top.removeChild(m._kavaLib)
+  m.top.removeChild(m._ottAnaylticsLib)
+  m.top.removeChild(m._kavaLib)
   m.top.removeChild(m._player)
   m._playkitLib = invalid
   m._player = invalid
   m._providerLib = invalid
   m._provider = invalid
-'  m._ottAnaylticsLib = invalid
-'  m._kavaLib = invalid
+  m._ottAnaylticsLib = invalid
+  m._kavaLib = invalid
 end function
 
 function play() as void
@@ -235,8 +243,12 @@ function setMute(isMuted as boolean) as void
   m._player.callFunc("setMute",isMuted)
 end function
 
+function _getPlayerConfig() as object
+  return AssociativeArrayUtil().mergeDeep(m._player.callFunc("getConfig"),{sources:{},plugins:{},session:{}})
+end function
+
 function getConfig() as object
-  return m._player.callFunc("getConfig")
+  return AssociativeArrayUtil().mergeDeep(_getPlayerConfig(),{plugins:m._pluginConfig})
 end function
 
 function getAudioTracks() as object
@@ -324,7 +336,7 @@ function getTimeToStartStream() as object
 end function
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
-  if m.top.hasFocus()
+  if m.top.hasFocus() and m._player <> invalid
     m._player.setFocus(true)
   end if
   return false

@@ -37,8 +37,7 @@ function evaluatePluginsConfig(config as object) as object
         end for
         pluginsConfig[plugin.key] = pluginConfig
     end for
-    conf = AssociativeArrayUtil().mergeDeep(config.plugins,pluginsConfig)
-    return conf
+    return AssociativeArrayUtil().mergeDeep(config.plugins,pluginsConfig)
 end function
 
 function _fetchDataFromConfig(config as object) as object
