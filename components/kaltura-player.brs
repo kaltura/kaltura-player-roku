@@ -39,7 +39,6 @@ end sub
      m.top.callFunc("dispatchEvent", m._events.KALTURA_PLAYER_LOADED)
 
      m.top.appendChild(m._player)
-     m._player.setFocus(true)
 
    endif
  end sub
