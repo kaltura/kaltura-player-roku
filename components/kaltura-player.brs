@@ -185,6 +185,7 @@ function getPoster() as string
   if config <> invalid and config.sources <> invalid
     return config.sources.poster
   endif
+  return ""
 end function
 
 function _reset()
@@ -223,6 +224,10 @@ function pause() as void
   m._player.callFunc("pause")
 end function
 
+function getSrc() as string
+  return m._player.callFunc("getSrc")
+end function
+
 function setPreload() as void
   m._player.callFunc("setPreload")
 end function
@@ -236,7 +241,7 @@ function setLoop(isLoop as boolean) as void
 end function
 
 function isMuted() as boolean
-  m._player.callFunc("isMuted")
+  return m._player.callFunc("isMuted")
 end function
 
 function setMute(isMuted as boolean) as void
@@ -259,7 +264,7 @@ function getCurrentAudioTrack() as object
   return m._player.callFunc("getCurrentAudioTrack")
 end function
 
-function selectAudioTrack(track as object) as object
+function selectAudioTrack(track as object) as void
   m._player.callFunc("selectAudioTrack", track)
 end function
 
