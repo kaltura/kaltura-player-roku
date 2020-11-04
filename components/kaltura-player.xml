@@ -20,6 +20,7 @@
         <function name="pause" />
         <function name="load" />
 
+        <function name="getSrc" />
         <function name="setPreload" />
         <function name="setLoop" />
         <function name="isMuted" />
