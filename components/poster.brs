@@ -34,8 +34,12 @@ function _selectPosterByPlayerDimensions(posters as object, playerWidth as integ
     min = 9999999999
     url = ""
     For each poster in posters
-        picWidth = poster.width
-        picHeight = poster.height
+        picHeight = 0
+        picWidth = 0
+        posterWidth = Val(StringUtil().toString(poster.width))
+        posterHeight = Val(StringUtil().toString(poster.width))
+        if poster.width <> invalid and posterWidth > 0 then picWidth = posterWidth
+        if poster.height <> invalid and posterHeight > 0 then picHeight = posterHeight
         widthDelta = Abs(picWidth - playerWidth)
         heightDelta = Abs(picHeight - playerHeight)
         delta = widthDelta + heightDelta
