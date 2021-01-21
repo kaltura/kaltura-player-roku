@@ -35,7 +35,7 @@ function _selectPosterByPlayerDimensions(posters as object, playerWidth as integ
     url = ""
     For each poster in posters
         posterWidth = Val(StringUtil().toString(poster.width))
-        posterHeight = Val(StringUtil().toString(poster.width))
+        posterHeight = Val(StringUtil().toString(poster.height))
         widthDelta = Abs(posterWidth - playerWidth)
         heightDelta = Abs(posterHeight - playerHeight)
         delta = widthDelta + heightDelta
