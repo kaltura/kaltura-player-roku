@@ -6,7 +6,7 @@
     "postinstall": "cp node_modules/playkit-roku/out/playkit-roku.zip source && cp node_modules/playkit-roku-providers/out/playkit-roku-providers.zip source",
     "deploy": "roku-deploy",
     "clean": "rm -rf ./out/*",
-    "build": "filename=$(cat ./rokudeploy.json | jq -j '.outFile') && zip -9 -r ./out/$filename.zip './source' './components' './images' 'manifest'",
+    "build": "yarn run clean && filename=$(cat ./rokudeploy.json | jq -j '.outFile') && zip -9 -r ./out/$filename.zip './source' './components' './images' 'manifest'",
     "debug": "host=$(cat ./rokudeploy.json | jq -j '.host') && telnet $host 8085",
     "release": "yarn run commit:docs && standard-version",
     "docs": "./node_modules/.bin/jsdoc -c jsdoc.json -t node_modules/minami -d docs",
